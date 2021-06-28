@@ -1,0 +1,63 @@
+@import '~antd/dist/antd.css';
+
+::-webkit-scrollbar-track {
+   /* border-radius: 0px; */
+   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	  -moz-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+* {
+  scrollbar-width: thin;
+  /* scrollbar-color: darkgrey #F5F5F5; */
+}
+
+@media screen and (min-width: 966px) {
+  ::-webkit-scrollbar, .scroller {
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff;
+  }
+}
+ 
+::-webkit-scrollbar-thumb {
+    /* border-radius: 0px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    -moz-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);  */
+   background-color: #a5a5a5;
+   border-radius: 10px;
+}
+
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+.z-shadow, .z-card {
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90,97,105,.1), 0 0.9375rem 1.40625rem rgba(90,97,105,.1), 0 0.25rem 0.53125rem rgba(90,97,105,.12), 0 0.125rem 0.1875rem rgba(90,97,105,.1);
+}
+
+.hoverable {
+    -webkit-transition: border-color 0.3s, -webkit-box-shadow 0.3s;
+    transition: border-color 0.3s, -webkit-box-shadow 0.3s;
+    transition: box-shadow 0.3s, border-color 0.3s;
+    transition: box-shadow 0.3s, border-color 0.3s, -webkit-box-shadow 0.3s;
+}
+
+.hoverable:hover {
+    border-color: transparent;
+    -webkit-box-shadow: 0 1px 2px -2px rgb(0 0 0 / 16%), 0 3px 6px 0 rgb(0 0 0 / 12%), 0 5px 12px 4px rgb(0 0 0 / 9%);
+    box-shadow: 0 1px 2px -2px rgb(0 0 0 / 16%), 0 3px 6px 0 rgb(0 0 0 / 12%), 0 5px 12px 4px rgb(0 0 0 / 9%);
+}
