@@ -4,6 +4,7 @@ import PersonPopup from './PersonPopup';
 import {
     DeleteOutlined
 } from '@ant-design/icons';
+import PropTypes from 'prop-types';
 
 const Train = (props) => {
     const [displayPersonPopup, setDisplayPersonPopup] = useState(false);
@@ -21,7 +22,7 @@ const Train = (props) => {
     }
 
     const addNew = (
-        <div className="rounded sm:w-full py-16 text-center opacity-50 hoverable cursor-pointer my-6" onClick={() => setDisplayPersonPopup(true)}>
+        <div className="rounded sm:w-full py-16 text-center opacity-50 z-hover cursor-pointer my-6" onClick={() => setDisplayPersonPopup(true)}>
             <svg  className="feather feather-plus mx-auto" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             <div className="py-4">
                 Add <span className="font-medium">Person</span> to Search
@@ -41,11 +42,12 @@ const Train = (props) => {
                             sm={24}
                             xs={24}
                             style={{marginBottom: 24}}
+                            key={index}
                         >
                             <div className="bg-white px-4 py-6 rounded-lg shadow-lg">
                                 <div 
                                     className="mx-auto h-40 rounded-md bg-cover bg-no-repeat bg-center"
-                                    style={{backgroundImage: `url(${person.images[0].thumbUrl})`}}
+                                    style={{backgroundImage: `url(${URL.createObjectURL(person.images[0])})`}}
                                 ></div>
                                 <div className="mt-2 text-center">
                                     <h5 className="font-bold font-mono text-gray-400">{person.name}</h5>
@@ -91,6 +93,11 @@ const Train = (props) => {
             }
         </React.Fragment>
     )
+}
+
+Train.propTypes = {
+    persons: PropTypes.array.isRequired,
+    setPersons: PropTypes.func.isRequired,
 }
 
 export default Train;

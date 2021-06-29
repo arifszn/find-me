@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Steps, Button, message } from 'antd';
 import styled from 'styled-components';
 import PageWrapper from '../layout/PageWrapper';
 import Train from './Train';
+import * as faceapi from 'face-api.js';
 
 const { Step } = Steps;
 
@@ -19,8 +20,11 @@ const StepAction = styled.div`
 
 const FaceFinder = () => {
     const [persons, setPersons] = useState([]);
-
     const [current, setCurrent] = useState(0);
+    const [modelLoaded, setModelLoaded] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const [descriptors, setDescriptors] = useState(null);
 
     const steps = [
         {
@@ -40,6 +44,26 @@ const FaceFinder = () => {
         },
     ];
 
+    useEffect(() => {
+        Promise.all([
+            faceapi.nets.faceRecognitionNet.loadFromUri(`${process.env.PUBLIC_URL}/assets/models`),
+            faceapi.nets.faceLandmark68Net.loadFromUri(`${process.env.PUBLIC_URL}/assets/models`),
+            faceapi.nets.ssdMobilenetv1.loadFromUri(`${process.env.PUBLIC_URL}/assets/models`)
+        ]).then(() => {
+            setModelLoaded(true);
+        })
+    }, [])
+
+    useEffect(() => {
+        if (current === 0) {
+            setDescriptors(null);
+        }
+        
+        if (current === 1) {
+            trainUploadedPhotos();
+        }
+    }, [current])
+
     const next = () => {
         setCurrent(current + 1);
     };
@@ -48,8 +72,43 @@ const FaceFinder = () => {
         setCurrent(current - 1);
     };
 
+    const trainUploadedPhotos = () => {
+        setLoading(true);
+        
+        Promise.all(
+            persons.map(person => {
+                const descriptions = [];
+
+                for (const imageBlob of person.images) {
+                    try {
+                        faceapi.bufferToImage(imageBlob)
+                        .then(img => {
+                            faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
+                            .then(detections => {
+                                if (detections) {
+                                    descriptions.push(detections.descriptor);
+                                }
+                            })
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+
+                return new faceapi.LabeledFaceDescriptors(person.name, descriptions);
+            })
+        ).then(faceDescriptors => {
+            setLoading(false);
+            setDescriptors(faceDescriptors);
+        })
+    }
+
     const isNextDisabled = () => {
-        if (current === 0 && !persons.length) {
+        if (current === 0 && (!modelLoaded || !persons.length)) {
+            return true;
+        }
+
+        if (current === 1 && !descriptors) {
             return true;
         }
 
@@ -66,7 +125,7 @@ const FaceFinder = () => {
             <StepContent>{steps[current].content}</StepContent>
             <StepAction>
                 {current > 0 && (
-                    <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
+                    <Button style={{ margin: '0 8px' }} onClick={() => prev()} loading={loading}>
                         Previous
                     </Button>
                 )}
@@ -75,6 +134,7 @@ const FaceFinder = () => {
                         type="primary" 
                         onClick={() => next()}
                         disabled={isNextDisabled()}
+                        loading={loading}
                     >
                         Next
                     </Button>

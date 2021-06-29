@@ -1,4 +1,4 @@
-import { notification } from 'antd';
+import { notification, message as tinyMessage } from 'antd';
 
 /**
  * Display notification
@@ -15,6 +15,16 @@ const showNotification = (message = 'Something went wrong', type = 'error', titl
         placement: 'bottomRight',
         duration: sticky ? 0 : 4.5
     });
+};
+
+/**
+ * Display tiny notification
+ * 
+ * @param string message 
+ * @param string type 
+ */
+const showTinyNotification = (message = 'Something went wrong', type = 'error') => {
+    tinyMessage[type](message);
 };
 
 /**
@@ -54,6 +64,7 @@ const randomHexColor = () => {
  */
 const Utils = {
     showNotification,
+    showTinyNotification,
     textEllipsis,
     randomHexColor,
     getAppName,

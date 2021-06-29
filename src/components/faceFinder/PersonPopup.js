@@ -59,15 +59,35 @@ const PersonPopup = (props) => {
     const handleOk = () => {
         form
         .validateFields()
-        .then((values) => {
+        .then(async (values) => {
+            let images = [];
+
+            for (const file of values.images) {
+                let fileBlob = null;
+                if (!file.url && !file.preview) {
+                    fileBlob = file.originFileObj
+                } else {
+                    fileBlob = await urlToBlob(file.url || file.preview);
+                }
+                images.push(fileBlob);
+            }
+
             props.submitCallback({
                 name: values.name,
-                images: imageFileList
+                images: images
             })
         })
         .catch((info) => {
             console.log('Validate Failed:', info);
         });
+    }
+
+    const urlToBlob = async (url) => {
+        const response = await fetch(url);
+        // here image is url/location of image
+        const blob = await response.blob();
+        const file = new File([blob], 'image.jpg', {type: blob.type});
+        return file;
     }
 
     const validateImage = (file) => {
@@ -161,7 +181,6 @@ const PersonPopup = (props) => {
                     <Form.Item
                         name="images"
                         label="Images"
-                        valuePropName="fileList"
                         getValueFromEvent={normFile}
                         rules={[
                             {
@@ -199,7 +218,6 @@ const PersonPopup = (props) => {
         </StyledDrawer>
     );
 }
-
 
 PersonPopup.propTypes = {
     handleCancel: PropTypes.func.isRequired,
