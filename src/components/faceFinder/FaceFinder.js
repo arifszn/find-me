@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Steps, Button, message } from 'antd';
 import styled from 'styled-components';
+import PageWrapper from '../layout/PageWrapper';
+import Train from './Train';
 
 const { Step } = Steps;
 
 const StepContent = styled.div`
     min-height: 200px;
-    margin-top: 16px;
-    padding-top: 80px;
-    text-align: center;
+    padding: 20px;
     background-color: #fafafa;
     border: 1px dashed #e9e9e9;
     border-radius: 2px;
@@ -19,21 +19,20 @@ const StepAction = styled.div`
     float: right;
 `;
 
-const Wrapper = styled.div`
-    margin: 20px;
-`;
-
 const steps = [
     {
-        title: 'First',
-        content: 'First-content',
+        title: 'Train',
+        description: <span className="text-gray-400">Provide minimum one photo of the person where the face is visible to train the model. All photos will be deleted after processing.</span>,
+        content: <Train/>,
     },
     {
         title: 'Second',
+        description: '',
         content: 'Second-content',
     },
     {
         title: 'Last',
+        description: '',
         content: 'Last-content',
     },
 ];
@@ -50,10 +49,10 @@ const FaceFinder = () => {
     };
 
     return (
-        <Wrapper>
-            <Steps current={current}>
+        <PageWrapper className="m-10">
+            <Steps current={current} direction="vertical">
                 {steps.map(item => (
-                    <Step key={item.title} title={item.title} />
+                    <Step key={item.title} title={item.title} description={item.description}/>
                 ))}
             </Steps>
             <StepContent>{steps[current].content}</StepContent>
@@ -74,7 +73,7 @@ const FaceFinder = () => {
                     </Button>
                 )}
             </StepAction>
-        </Wrapper>
+        </PageWrapper>
     )
 }
 

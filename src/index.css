@@ -66,6 +66,41 @@ code {
     box-shadow: 0 1px 2px -2px rgb(0 0 0 / 16%), 0 3px 6px 0 rgb(0 0 0 / 12%), 0 5px 12px 4px rgb(0 0 0 / 9%);
 }
 
+
+.z-hover {
+    transition: all ease-in-out 0.3s !important;
+}
+
+.z-hover:hover,
+.z-hover:focus,
+.z-hover:active {
+    transition: transform .8s;
+    -ms-transform: scale(1.05); /* IE 9 */
+    -webkit-transform: scale(1.05); /* Safari 3-8 */
+    transform: scale(1.05);
+}
+
 svg {
     vertical-align: unset
 }
+
+/* ---------- animation starts ---------- */
+
+.fade-enter{
+   opacity: 0;
+}
+.fade-exit{
+   opacity: 1;
+}
+.fade-enter-active{
+   opacity: 1;
+}
+.fade-exit-active{
+   opacity: 0;
+}
+.fade-enter-active,
+.fade-exit-active{
+   transition: opacity 300ms;
+}
+
+/* ---------- animation ends ---------- */
