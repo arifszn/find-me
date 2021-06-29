@@ -7,8 +7,6 @@ import Train from './Train';
 const { Step } = Steps;
 
 const StepContent = styled.div`
-    min-height: 200px;
-    padding: 20px;
     background-color: #fafafa;
     border: 1px dashed #e9e9e9;
     border-radius: 2px;
@@ -19,26 +17,28 @@ const StepAction = styled.div`
     float: right;
 `;
 
-const steps = [
-    {
-        title: 'Train',
-        description: <span className="text-gray-400">Provide minimum one photo of the person where the face is visible to train the model. All photos will be deleted after processing.</span>,
-        content: <Train/>,
-    },
-    {
-        title: 'Second',
-        description: '',
-        content: 'Second-content',
-    },
-    {
-        title: 'Last',
-        description: '',
-        content: 'Last-content',
-    },
-];
-
 const FaceFinder = () => {
+    const [persons, setPersons] = useState([]);
+
     const [current, setCurrent] = useState(0);
+
+    const steps = [
+        {
+            title: 'Train',
+            description: <span className="text-gray-400">Provide minimum one photo of the person where the face is visible to train the model. All photos will be deleted after processing.</span>,
+            content: <Train persons={persons} setPersons={setPersons}/>,
+        },
+        {
+            title: 'Second',
+            description: '',
+            content: 'Second-content',
+        },
+        {
+            title: 'Last',
+            description: '',
+            content: 'Last-content',
+        },
+    ];
 
     const next = () => {
         setCurrent(current + 1);
@@ -47,6 +47,14 @@ const FaceFinder = () => {
     const prev = () => {
         setCurrent(current - 1);
     };
+
+    const isNextDisabled = () => {
+        if (current === 0 && !persons.length) {
+            return true;
+        }
+
+        return false;
+    }
 
     return (
         <PageWrapper className="m-10">
@@ -63,7 +71,11 @@ const FaceFinder = () => {
                     </Button>
                 )}
                 {current < steps.length - 1 && (
-                    <Button type="primary" onClick={() => next()}>
+                    <Button 
+                        type="primary" 
+                        onClick={() => next()}
+                        disabled={isNextDisabled()}
+                    >
                         Next
                     </Button>
                 )}
