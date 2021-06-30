@@ -168,7 +168,7 @@ const PersonPopup = (props) => {
                             },
                         ]}
                     >
-                        <Input placeholder="Enter the person's name"/>
+                        <Input placeholder="Enter the person's name" autocomplete="off"/>
                     </Form.Item>
                     <Form.Item
                         name="images"
@@ -177,7 +177,7 @@ const PersonPopup = (props) => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please upload images of the person',
+                                message: 'Please upload minimum 1 image of the person',
                             },
                         ]}
                     >

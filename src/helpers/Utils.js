@@ -31,7 +31,7 @@ const showTinyNotification = (message = 'Something went wrong', type = 'error') 
  * Return app name
  */
 const getAppName = () => {
-    return 'Face Finder';
+    return 'Find Me';
 }
 
 /**

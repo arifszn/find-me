@@ -1,6 +1,5 @@
-import { Drawer, Button, Spin, Input, Form, Upload, Modal } from 'antd';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { Upload, Modal } from 'antd';
+import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import Utils from '../../helpers/Utils';
@@ -32,7 +31,9 @@ const Find = (props) => {
     }
 
     const imageListHandleChange = (info) => {
-        props.setImages(info.fileList.filter(file => validateImage(file)))
+        let list = info.fileList.filter(file => validateImage(file));
+
+        props.setImage(list.length ? list[0] : null);
     };
 
     const handlePreview = async file => {
@@ -60,7 +61,7 @@ const Find = (props) => {
                 <Upload
                     accept={['image/png', 'image/jpeg', 'image/jpg']}
                     listType="picture-card"
-                    fileList={props.images}
+                    fileList={props.image ? [props.image] : []}
                     beforeUpload={
                         () => {
                             return false;
@@ -69,7 +70,7 @@ const Find = (props) => {
                     onPreview={handlePreview}
                     onChange={imageListHandleChange}
                 >
-                    {props.images.length >= 1 ? null : uploadButton}
+                    {props.image ? null : uploadButton}
                 </Upload>
             </div>
             <Modal
@@ -86,8 +87,7 @@ const Find = (props) => {
 }
 
 Find.propTypes = {
-    images: PropTypes.array.isRequired,
-    setImages: PropTypes.func.isRequired,
+    result: PropTypes.object.isRequired
 }
 
 export default Find;

@@ -45,10 +45,13 @@ const Train = (props) => {
                             key={index}
                         >
                             <div className="bg-white px-4 py-6 rounded-lg shadow-lg">
-                                <div 
-                                    className="mx-auto h-40 rounded-md bg-cover bg-no-repeat bg-center"
-                                    style={{backgroundImage: `url(${URL.createObjectURL(person.images[0])})`}}
-                                ></div>
+                                <div>
+                                    <img 
+                                        src={URL.createObjectURL(person.images[0])}
+                                        alt={'thumbnail'}
+                                        className="mx-auto h-40 rounded-md object-cover"
+                                    />
+                                </div>
                                 <div className="mt-2 text-center">
                                     <h5 className="font-bold font-mono text-gray-400">{person.name}</h5>
                                 </div>

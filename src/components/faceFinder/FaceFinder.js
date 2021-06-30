@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Steps, Button, message, Spin } from 'antd';
+import { Steps, Button, Spin } from 'antd';
 import styled from 'styled-components';
 import PageWrapper from '../layout/PageWrapper';
 import Train from './Train';
@@ -23,8 +23,8 @@ const StepAction = styled.div`
 
 const FaceFinder = () => {
     const [persons, setPersons] = useState([]);
-    const [images, setImages] = useState([]);
-    const [formattedImage, setFormattedImage] = useState([]);
+    const [image, setImage] = useState(null);
+    const [result, setResult] = useState(null);
 
     const [current, setCurrent] = useState(0);
     const [modelLoaded, setModelLoaded] = useState(false);
@@ -32,24 +32,22 @@ const FaceFinder = () => {
     const [componentLoading, setComponentLoading] = useState(false);
 
     const [descriptors, setDescriptors] = useState(null);
-    const [detections, setDetections] = useState([]);
-    const [result, setResult] = useState(null);
 
     const steps = [
         {
             title: 'Train',
-            description: <span className="text-gray-400">Provide minimum one photo of the person where the face is visible to train the model. All photos will be deleted after processing.</span>,
-            content: <Train persons={persons} setPersons={setPersons}/>,
+            description: <span className="text-gray-400">Provide minimum one non-group image of the person to train the model. All images will be deleted after processing. You can add multiple persons to find.</span>,
+            content: <Train persons={persons} setPersons={setPersons} />,
         },
         {
-            title: 'Find',
-            description: <span className="text-gray-400">Upload photos and find the persons in the uploaded photos.</span>,
-            content: <Find images={images} setImages={setImages}/>,
+            title: 'Upload',
+            description: <span className="text-gray-400">Upload a image to find if the person is present in that image.</span>,
+            content: <Find image={image} setImage={setImage}/>,
         },
         {
             title: 'Result',
             description: '',
-            content: <Result detections={detections} images={formattedImage} result={result}/>,
+            content: <Result result={result}/>,
         },
     ];
 
@@ -73,8 +71,10 @@ const FaceFinder = () => {
         }
 
         if (current === 2) {
-            processImages();
+            setResult(null);
+            startImageMatching();
         }
+        // eslint-disable-next-line
     }, [current])
 
     const next = () => {
@@ -85,68 +85,41 @@ const FaceFinder = () => {
         setCurrent(current - 1);
     };
 
-    const processImages = async () => {
-        if (descriptors) {
-            const container = document.createElement('div');
-            container.style.position = 'relative';
-            document.body.append(container)
+    const startImageMatching = async () => {
+        if (descriptors && image) {
+            setLoading(true);
 
-            let canvas;
-            const blobImages = [];
-            
-            for (const file of images) {
-                let fileBlob = null;
-                if (!file.url && !file.preview) {
-                    fileBlob = file.originFileObj
-                } else {
-                    fileBlob = await Utils.urlToBlob(file.url || file.preview);
-                }
-                blobImages.push(fileBlob);
+            let fileBlob = null;
+
+            if (!image.url && !image.preview) {
+                fileBlob = image.originFileObj
+            } else {
+                fileBlob = await Utils.urlToBlob(image.url || image.preview);
             }
 
             const faceMatcher = new faceapi.FaceMatcher(descriptors, 0.6);
+            const uploadedImage = await faceapi.bufferToImage(fileBlob);
 
-            const uploadedImage = await faceapi.bufferToImage(blobImages[0])
+            let canvas = faceapi.createCanvasFromMedia(uploadedImage);
+            const displaySize = { width: uploadedImage.width, height: uploadedImage.height };
+            faceapi.matchDimensions(canvas, displaySize);
 
             const _detections = await faceapi.detectAllFaces(uploadedImage).withFaceLandmarks().withFaceDescriptors();
+            const _resizedDetections = faceapi.resizeResults(_detections, displaySize);
+            const _result = _resizedDetections.map(item => faceMatcher.findBestMatch(item.descriptor));
 
-            const _result = _detections.map(item => faceMatcher.findBestMatch(item.descriptor));
-
-
-            // const container = document.createElement('div');
-            /* container.append(uploadedImage);
-
-            canvas = faceapi.createCanvasFromMedia(uploadedImage);
-            const displaySize = { width: uploadedImage.width, height: uploadedImage.height }
-            faceapi.matchDimensions(canvas, displaySize)
-
-            const resizedDetections = faceapi.resizeResults(_detections, displaySize)
-
-            const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor));
-            console.log(results);
-
-            let myArray = [];
-            results.forEach((result, i) => {
-                const box = resizedDetections[i].detection.box
-                const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
-                drawBox.draw(canvas)
-
-                container.append(canvas)
-            }) */
-
-            setDetections(_detections);
-            setResult(_result);
-            setFormattedImage(blobImages)
-
-            /* const resizedDetections = faceapi.resizeResults(detections, displaySize)
-            const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
-            results.forEach((result, i) => {
-                const box = resizedDetections[i].detection.box
-                const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
-                drawBox.draw(canvas)
+            _result.forEach((result, i) => {
+                const box = _resizedDetections[i].detection.box;
+                const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString(), boxColor: "#096dd9" });
+                drawBox.draw(canvas);
             })
 
-            console.log(detections); */
+            setResult({
+                image: URL.createObjectURL(fileBlob),
+                canvas: canvas
+            });
+
+            setLoading(false);
         }
     }
 
@@ -186,7 +159,7 @@ const FaceFinder = () => {
             return true;
         }
 
-        if (current === 1 && (!descriptors || !images.length)) {
+        if (current === 1 && (!descriptors || !image)) {
             return true;
         }
 
@@ -219,7 +192,11 @@ const FaceFinder = () => {
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                        <Button 
+                            type="primary" 
+                            onClick={() => Utils.showTinyNotification('Processing complete!', 'success')}
+                            loading={loading}
+                        >
                             Done
                         </Button>
                     )}
