@@ -67,7 +67,7 @@ const PersonPopup = (props) => {
                 if (!file.url && !file.preview) {
                     fileBlob = file.originFileObj
                 } else {
-                    fileBlob = await urlToBlob(file.url || file.preview);
+                    fileBlob = await Utils.urlToBlob(file.url || file.preview);
                 }
                 images.push(fileBlob);
             }
@@ -80,14 +80,6 @@ const PersonPopup = (props) => {
         .catch((info) => {
             console.log('Validate Failed:', info);
         });
-    }
-
-    const urlToBlob = async (url) => {
-        const response = await fetch(url);
-        // here image is url/location of image
-        const blob = await response.blob();
-        const file = new File([blob], 'image.jpg', {type: blob.type});
-        return file;
     }
 
     const validateImage = (file) => {

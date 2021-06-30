@@ -60,6 +60,19 @@ const randomHexColor = () => {
 }
 
 /**
+ * Url to blob
+ * 
+ * @param string url 
+ */
+const urlToBlob = async (url) => {
+    const response = await fetch(url);
+    // here image is url/location of image
+    const blob = await response.blob();
+    const file = new File([blob], 'image.jpg', {type: blob.type});
+    return file;
+}
+
+/**
  * Utility helper
  */
 const Utils = {
@@ -68,6 +81,7 @@ const Utils = {
     textEllipsis,
     randomHexColor,
     getAppName,
+    urlToBlob
 }
 
 export default Utils;
