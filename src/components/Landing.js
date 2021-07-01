@@ -37,7 +37,7 @@ const Landing = (props) => {
                 <div className="lg:flex lg:h-screen mx-auto my-auto mt-10 lg:mt-0">
                     <div className="flex justify-center items-center">
                         <div className="bg-white border-2 border-gray-300 p-6 rounded-md tracking-wide shadow-lg">
-                        <StyledIframe src="https://www.youtube-nocookie.com/embed/g8pG7NhCPPI?rel=0&modestbranding=1&autohide=1&showinfo=0&controls=1" frameborder="0" allowFullScreen></StyledIframe>
+                        <StyledIframe src="https://www.youtube-nocookie.com/embed/smdWqhqyHCA?rel=0&modestbranding=1&autohide=1&showinfo=0&controls=1" frameborder="0" allowFullScreen></StyledIframe>
                         </div>
                     </div>
                 </div>
