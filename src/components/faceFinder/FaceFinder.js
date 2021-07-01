@@ -59,7 +59,7 @@ const FaceFinder = () => {
         },
         {
             title: 'Upload',
-            description: <span className="text-gray-400">Upload a image to find if the person is present in that image.</span>,
+            description: <span className="text-gray-400">Upload an image to find if the person is present in that image.</span>,
             content: <Find image={image} setImage={setImage} />,
         },
         {
