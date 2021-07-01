@@ -168,7 +168,7 @@ const PersonPopup = (props) => {
                             },
                         ]}
                     >
-                        <Input placeholder="Enter the person's name" autocomplete="off"/>
+                        <Input placeholder="Enter the person's name" /* autocomplete="off" *//>
                     </Form.Item>
                     <Form.Item
                         name="images"

@@ -14,6 +14,7 @@ const Result = (props) => {
                                     src={typeof props.result.image !== 'undefined' ? props.result.image : null}
                                     preview={false}
                                     placeholder={true}
+                                    className="rounded-lg z-shadow"
                                     style={{
                                         transition: '0.3s ease',
                                     }}

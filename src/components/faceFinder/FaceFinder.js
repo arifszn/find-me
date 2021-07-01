@@ -7,8 +7,26 @@ import * as faceapi from 'face-api.js';
 import Find from './Find';
 import Utils from '../../helpers/Utils';
 import Result from './Result';
+import Resizer from "react-image-file-resizer";
 
 const { Step } = Steps;
+
+const resizeFile = (file, maxWidth = 300, maxHeight = 300) => {
+    return new Promise((resolve) => {
+        Resizer.imageFileResizer(
+            file,
+            maxWidth,
+            maxHeight,
+            "JPEG",
+            100,
+            0,
+            (uri) => {
+                resolve(uri);
+            },
+            "blob"
+        );
+    });
+}
 
 const StepContent = styled.div`
     background-color: #fafafa;
@@ -42,12 +60,12 @@ const FaceFinder = () => {
         {
             title: 'Upload',
             description: <span className="text-gray-400">Upload a image to find if the person is present in that image.</span>,
-            content: <Find image={image} setImage={setImage}/>,
+            content: <Find image={image} setImage={setImage} />,
         },
         {
             title: 'Result',
             description: '',
-            content: <Result result={result}/>,
+            content: <Result result={result} />,
         },
     ];
 
@@ -65,7 +83,7 @@ const FaceFinder = () => {
         if (current === 0) {
             setDescriptors(null);
         }
-        
+
         if (current === 1) {
             trainUploadedPhotos();
         }
@@ -97,8 +115,16 @@ const FaceFinder = () => {
                 fileBlob = await Utils.urlToBlob(image.url || image.preview);
             }
 
+            
+            
+            let uploadedImage = await faceapi.bufferToImage(fileBlob);
+
+            if (uploadedImage.width > 1000 || uploadedImage.height > 1000) {
+                fileBlob = await resizeFile(fileBlob, 1000, 1000);
+                uploadedImage = await faceapi.bufferToImage(fileBlob);
+            }
+            
             const faceMatcher = new faceapi.FaceMatcher(descriptors, 0.6);
-            const uploadedImage = await faceapi.bufferToImage(fileBlob);
 
             let canvas = faceapi.createCanvasFromMedia(uploadedImage);
             const displaySize = { width: uploadedImage.width, height: uploadedImage.height };
@@ -125,7 +151,7 @@ const FaceFinder = () => {
 
     const trainUploadedPhotos = () => {
         setComponentLoading(true);
-        
+
         Promise.all(
             persons.map(person => {
                 const descriptions = [];
@@ -133,14 +159,14 @@ const FaceFinder = () => {
                 for (const imageBlob of person.images) {
                     try {
                         faceapi.bufferToImage(imageBlob)
-                        .then(img => {
-                            faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
-                            .then(detections => {
-                                if (detections) {
-                                    descriptions.push(detections.descriptor);
-                                }
-                            })
-                        });
+                            .then(img => {
+                                faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
+                                    .then(detections => {
+                                        if (detections) {
+                                            descriptions.push(detections.descriptor);
+                                        }
+                                    })
+                            });
                     } catch (error) {
                         console.error(error);
                     }
@@ -166,12 +192,21 @@ const FaceFinder = () => {
         return false;
     }
 
+    const resetState = () => {
+        setPersons([]);
+        setImage(null);
+        setResult(null);
+
+        setCurrent(0);
+        setDescriptors(null);
+    }
+
     return (
         <PageWrapper className="m-10">
             <Spin spinning={componentLoading} /* delay={500} */>
                 <Steps current={current} direction="vertical">
                     {steps.map(item => (
-                        <Step key={item.title} title={item.title} description={item.description}/>
+                        <Step key={item.title} title={item.title} description={item.description} />
                     ))}
                 </Steps>
                 <StepContent>{steps[current].content}</StepContent>
@@ -182,8 +217,8 @@ const FaceFinder = () => {
                         </Button>
                     )}
                     {current < steps.length - 1 && (
-                        <Button 
-                            type="primary" 
+                        <Button
+                            type="primary"
                             onClick={() => next()}
                             disabled={isNextDisabled()}
                             loading={loading}
@@ -192,9 +227,9 @@ const FaceFinder = () => {
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button 
-                            type="primary" 
-                            onClick={() => Utils.showTinyNotification('Processing complete!', 'success')}
+                        <Button
+                            type="primary"
+                            onClick={resetState}
                             loading={loading}
                         >
                             Done

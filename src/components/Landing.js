@@ -1,15 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
+const StyledIframe = styled.iframe`
+    max-width: 100%;
+    width: 560px;
+    height: 315px;
+
+    @media (max-width: 640px) {
+        height: unset;
+    }
+`;
 
 const Landing = (props) => {
     return (
         <React.Fragment>
-            <div className="container mx-auto px-6 sm:px-12 flex flex-col-reverse sm:flex-row items-center">
-                <div className="sm:w-2/5 flex flex-col items-start mt-8 sm:mt-0 mb-5 sm:mb-0">
-                    <h1 className="text-4xl lg:text-6xl leading-none mb-4 mx-auto md:ml-0">
+            <div className="container mx-auto px-6 sm:px-12 flex flex-col-reverse lg:flex-row items-center">
+                <div className="sm:w-2/5 flex flex-col items-start mt-8 lg:mt-0 mb-5 sm:mb-0">
+                    <h1 className="text-4xl lg:text-6xl leading-none mb-4 mx-auto lg:ml-0">
                         <strong className="font-black">Find</strong> Me
                     </h1>
-                    <p className="lg:text-lg mb-4 sm:mb-12 text-center md:text-left text-gray-400 font-semibold">
+                    <p className="lg:text-lg mb-4 sm:mb-12 text-center lg:text-left text-gray-400 font-semibold mx-auto lg:ml-0">
                         Server less face recognition app
                     </p>
                     <a 
@@ -18,18 +29,17 @@ const Landing = (props) => {
                             e.preventDefault();
                             props.setDisplayLanding(false);
                         }}
-                        className="font-semibold text-lg bg-blue-500 hover:bg-blue-400 text-white hover:text-gray-700 py-3 px-10 rounded-full mx-auto md:ml-0"
+                        className="font-semibold text-lg bg-blue-500 hover:bg-blue-400 text-white hover:text-gray-700 py-3 px-10 rounded-full mx-auto lg:ml-0"
                     >
                         Get Started
                     </a>
                 </div>
-                <div className="mx-auto">
-                    <img
-                        src={`${process.env.PUBLIC_URL}/assets/img/landing.png`}
-                        alt="Landing"
-                        width={500}
-                        height={500}
-                    />
+                <div className="lg:flex lg:h-screen mx-auto my-auto mt-10 lg:mt-0">
+                    <div class="flex justify-center items-center">
+                        <div class="bg-white border-2 border-gray-300 p-6 rounded-md tracking-wide shadow-lg">
+                        <StyledIframe src="https://www.youtube-nocookie.com/embed/FMrtSHAAPhM?rel=0&modestbranding=1&autohide=1&showinfo=0&controls=0" frameborder="0"></StyledIframe>
+                        </div>
+                    </div>
                 </div>
             </div>
         </React.Fragment>
