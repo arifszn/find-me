@@ -21,14 +21,15 @@ https://arifszn.github.io/find-me
 
 
 ## Screenshots
-
-<kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/1.png" alt="screenhot 1"/></kbd>
-<br /><br />
-<kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/2.png" alt="screenhot 2"/></kbd>
-<br /><br />
-<kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/3.png" alt="screenhot 3"/></kbd>
-<br /><br />
-<kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/4.png" alt="screenhot 4"/></kbd>
+<a href="http://arifszn.github.io/find-me" target="_blank">
+  <kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/1.png" alt="screenhot 1"/></kbd>
+  <br /><br />
+  <kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/2.png" alt="screenhot 2"/></kbd>
+  <br /><br />
+  <kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/3.png" alt="screenhot 3"/></kbd>
+  <br /><br />
+  <kbd><img src="https://arifszn.github.io/find-me/assets/img/screenshots/4.png" alt="screenhot 4"/></kbd>
+</a>
 
 
 ## License
