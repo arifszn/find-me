@@ -32,6 +32,11 @@ https://arifszn.github.io/find-me
 </a>
 
 
+## Support
+
+Show your ❤️ and support by giving a <a href="https://github.com/arifszn/find-me">star</a>.
+
+
 ## License
 
 <p>MIT Licensed.</p>
