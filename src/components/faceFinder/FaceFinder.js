@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Steps, Button, Spin } from 'antd';
 import styled from 'styled-components';
 import PageWrapper from '../layout/PageWrapper';
-import Train from './Train';
+import AddFaces from './AddFaces';
 import * as faceapi from 'face-api.js';
-import Find from './Find';
+import SearchFaces from './SearchFaces';
 import Utils from '../../helpers/Utils';
 import Result from './Result';
 import Resizer from "react-image-file-resizer";
@@ -40,7 +40,7 @@ const StepAction = styled.div`
 `;
 
 const FaceFinder = () => {
-    const [persons, setPersons] = useState([]);
+    const [faces, setFaces] = useState([]);
     const [image, setImage] = useState(null);
     const [result, setResult] = useState(null);
 
@@ -53,14 +53,14 @@ const FaceFinder = () => {
 
     const steps = [
         {
-            title: 'Train',
-            description: <span className="text-gray-400">Provide minimum one non-group image of the person to train the model. All images will be deleted after processing. You can add multiple persons to find.</span>,
-            content: <Train persons={persons} setPersons={setPersons} />,
+            title: 'Add Faces',
+            description: <span className="text-gray-400">Provide faces to be searched. All images will be deleted after processing.</span>,
+            content: <AddFaces faces={faces} setFaces={setFaces} />,
         },
         {
-            title: 'Upload',
-            description: <span className="text-gray-400">Upload an image to find if the person is present in that image.</span>,
-            content: <Find image={image} setImage={setImage} />,
+            title: 'Search Faces',
+            description: <span className="text-gray-400">Search the faces in an image.</span>,
+            content: <SearchFaces image={image} setImage={setImage} />,
         },
         {
             title: 'Result',
@@ -153,10 +153,10 @@ const FaceFinder = () => {
         setComponentLoading(true);
 
         Promise.all(
-            persons.map(person => {
+            faces.map(face => {
                 const descriptions = [];
 
-                for (const imageBlob of person.images) {
+                for (const imageBlob of face.images) {
                     try {
                         faceapi.bufferToImage(imageBlob)
                             .then(img => {
@@ -172,7 +172,7 @@ const FaceFinder = () => {
                     }
                 }
 
-                return new faceapi.LabeledFaceDescriptors(person.name, descriptions);
+                return new faceapi.LabeledFaceDescriptors(face.name, descriptions);
             })
         ).then(faceDescriptors => {
             setComponentLoading(false);
@@ -181,7 +181,7 @@ const FaceFinder = () => {
     }
 
     const isNextDisabled = () => {
-        if (current === 0 && (!modelLoaded || !persons.length)) {
+        if (current === 0 && (!modelLoaded || !faces.length)) {
             return true;
         }
 
@@ -193,7 +193,7 @@ const FaceFinder = () => {
     }
 
     const resetState = () => {
-        setPersons([]);
+        setFaces([]);
         setImage(null);
         setResult(null);
 

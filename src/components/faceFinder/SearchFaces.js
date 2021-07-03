@@ -11,7 +11,7 @@ const uploadButton = (
     </div>
 );
 
-const Find = (props) => {
+const SearchFaces = (props) => {
     const [previewImage, setPreviewImage] = useState('');
     const [previewVisible, setPreviewVisible] = useState(false);
 
@@ -86,8 +86,9 @@ const Find = (props) => {
     )
 }
 
-Find.propTypes = {
-    result: PropTypes.object.isRequired
+SearchFaces.propTypes = {
+    image: PropTypes.object,
+    setImage: PropTypes.func.isRequired,
 }
 
-export default Find;
+export default SearchFaces;

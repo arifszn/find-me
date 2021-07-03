@@ -21,7 +21,7 @@ const uploadButton = (
     </div>
 );
 
-const PersonPopup = (props) => {
+const AddFacePopup = (props) => {
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState((typeof props.loading !== 'undefined') ? props.loading : false);
@@ -156,7 +156,7 @@ const PersonPopup = (props) => {
                     preserve={false}
                     form={form}
                     layout="vertical"
-                    name="person-form"
+                    name="face-form"
                 >
                     <Form.Item
                         name="name"
@@ -164,11 +164,11 @@ const PersonPopup = (props) => {
                         rules={[
                             {
                                 required: true,
-                                message: "Please enter the person's name"
+                                message: "Please enter the face's name"
                             },
                         ]}
                     >
-                        <Input placeholder="Enter the person's name" /* autocomplete="off" *//>
+                        <Input placeholder="Enter the face's name" /* autocomplete="off" *//>
                     </Form.Item>
                     <Form.Item
                         name="images"
@@ -177,7 +177,7 @@ const PersonPopup = (props) => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please upload minimum 1 image of the person',
+                                message: 'Please upload minimum 1 image of the face',
                             },
                         ]}
                     >
@@ -211,7 +211,7 @@ const PersonPopup = (props) => {
     );
 }
 
-PersonPopup.propTypes = {
+AddFacePopup.propTypes = {
     handleCancel: PropTypes.func.isRequired,
     submitCallback: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
@@ -220,4 +220,4 @@ PersonPopup.propTypes = {
     title: PropTypes.node,
 }
 
-export default PersonPopup;
+export default AddFacePopup;
