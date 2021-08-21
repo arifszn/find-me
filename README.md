@@ -34,7 +34,7 @@ https://arifszn.github.io/find-me
 
 ## Support
 
-Show your ❤️ and support by giving a <a href="https://github.com/arifszn/find-me">star</a>.
+Show your ❤️ and support by giving a ⭐.
 
 
 ## License
