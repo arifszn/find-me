@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/react.js-blue" alt="laravel 8.40">
 </p>
 
-Face recognition app made with face-api.js and React. It demonstrates the usage of face-api.js which is a JavaScript API for face detection and face recognition in the browser.
+Face recognition app built with face-api.js and React. It demonstrates the usage of face-api.js which is a JavaScript API for face detection and face recognition in the browser.
 
 ## Demo
 
